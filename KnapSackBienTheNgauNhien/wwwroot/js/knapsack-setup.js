@@ -68,54 +68,41 @@ function generateRandomItems() {
 
     //danh sách tên vật phẩm ngẫu nhiên
     const danhSachTenVatPham = [
-        "Súng lục 1911",
-        "Súng lục Baretta M9A4",
-        "Súng lục Desert Eagle .50",
-        "Súng lục CZ-75",
-        "Súng lục Walther PPK",
-        "Súng lục Sig Sauer P226",
-        "Súng lục Colt Python",
-        "Súng lục Smith & Wesson M&P",
-        "Súng lục Glock 17",
-        "Súng lục Pit Viper 2011",
-        "Mũ cối Level 3",
-        "Áo Giáp Kevlar",
-        "Giáp chống đạn Level 4",
-        "Mũ ACH Level 3A",
-        "Plate Carrier với tấm ceramic",
-        "Mũ OPS-Core FAST",
-        "Áo giáp mềm NIJ Level II",
-        "Mũ beret đặc nhiệm",
-        "Giáp vai chống sát thương",
-        "Kính bảo hộ balistic",
-        "Găng tay chống đạn",
-        "Giày chống mảnh văng",
-        "Balo chiến thuật",
-        "Lựu đạn M67",
-        "Bộ cứu thương (Medkit)",
-        "Ống nhòm tầm xa",
-        "Dao găm quân dụng",
-        "Mặt nạ phòng độc",
-        "Đèn pin chiến thuật",
-        "Hộp đạn 9mm",
-        "Bandage cứu thương",
-        "Bình nước",
-        "Súng trường AK-47",
-        "Súng ngắn Glock 17",
-        "Giáp chống đạn Level 4",
-        "Kính nhìn đêm NVG",
-        "Súng bắn tỉa M24",
-        "Bom khói M18",
-        "Thuốc giảm đau (Painkillers)",
-        "Thiết bị theo dõi sức khỏe",
-        "Hộp đạn 7.62mm",
-        "Bộ dụng cụ sửa chữa",
-        "Hộp đạn 5.56mm",
-        "Áo ngụy trang",
-        "Giày boots quân sự",
-        "Dao đa năng Leatherman",
-        "Pin dự phòng",
-        "La bàn định vị"
+        // **SÚNG** (nhân bản x5-6 lần mỗi loại chính)
+        "[⌐╦ᡁ᠊╾]Súng lục 1911", "[⌐╦ᡁ᠊╾]Súng lục 1911", "[⌐╦ᡁ᠊╾]Súng lục 1911", "[⌐╦ᡁ᠊╾]Súng lục 1911", "[⌐╦ᡁ᠊╾]Súng lục 1911",
+        "[⌐╦ᡁ᠊╾]Súng lục Baretta M9A4", "[⌐╦ᡁ᠊╾]Súng lục Baretta M9A4", "[⌐╦ᡁ᠊╾]Súng lục Baretta M9A4",
+        "[⌐╦ᡁ᠊╾]Súng lục Desert Eagle .50", "[⌐╦ᡁ᠊╾]Súng lục Desert Eagle .50", "[⌐╦ᡁ᠊╾]Súng lục Desert Eagle .50",
+        "[⌐╦ᡁ᠊╾]Súng lục Glock 17", "[⌐╦ᡁ᠊╾]Súng lục Glock 17", "[⌐╦ᡁ᠊╾]Súng lục Glock 17", "[⌐╦ᡁ᠊╾]Súng lục Glock 17",
+        "[╾╤デ╦︻]    Súng trường AK-47", "[╾╤デ╦︻]    Súng trường AK-47", "[╾╤デ╦︻]    Súng trường AK-47", "[╾╤デ╦︻]    Súng trường AK-47", "[╾╤デ╦︻]    Súng trường AK-47", "[╾╤デ╦︻]    Súng trường AK-47",
+        "[ᡕᠵデᡁ᠊╾━]    Súng bắn tỉa M24", "[ᡕᠵデᡁ᠊╾━]    Súng bắn tỉa M24", "[ᡕᠵデᡁ᠊╾━]    Súng bắn tỉa M24", "[ᡕᠵデᡁ᠊╾━]    Súng bắn tỉa M24", "[ᡕᠵデᡁ᠊╾━]    Súng bắn tỉa M24",
+
+        // **ĐẠN DƯỢC** (nhân bản x12-15 lần - drop rate cực cao)
+        "[⌯⁍]Hộp đạn 9mm", "[⌯⁍]Hộp đạn 9mm", "[⌯⁍]Hộp đạn 9mm", "[⌯⁍]Hộp đạn 9mm", "[⌯⁍]Hộp đạn 9mm", "[⌯⁍]Hộp đạn 9mm", "[⌯⁍]Hộp đạn 9mm",
+        "[⌯⁍]Băng đạn .45 ACP (1911)", "[⌯⁍]Băng đạn .45 ACP (1911)", "[⌯⁍]Băng đạn .45 ACP (1911)", "[⌯⁍]Băng đạn .45 ACP (1911)",
+        "[⌯⁍]Băng đạn .50 AE (Desert Eagle)", "[⌯⁍]Băng đạn .50 AE (Desert Eagle)", "[⌯⁍]Băng đạn .50 AE (Desert Eagle)",
+        "[⌯⁍]Hộp đạn 5.56mm NATO", "[⌯⁍]Hộp đạn 5.56mm NATO", "[⌯⁍]Hộp đạn 5.56mm NATO", "[⌯⁍]Hộp đạn 5.56mm NATO", "[⌯⁍]Hộp đạn 5.56mm NATO",
+        "[⌯⁍]Băng đạn AK-47 7.62x39", "[⌯⁍]Băng đạn AK-47 7.62x39", "[⌯⁍]Băng đạn AK-47 7.62x39", "[⌯⁍]Băng đạn AK-47 7.62x39",
+        "[⌯⁍]Hộp đạn (sniper)", "[⌯⁍]Hộp đạn (sniper)", "[⌯⁍]Hộp đạn (sniper)", "[⌯⁍]Hộp đạn (sniper)",
+        "[⌯⁍]Mag STANAG 30 viên", "[⌯⁍]Mag STANAG 30 viên", "[⌯⁍]Mag STANAG 30 viên",
+        "[⌯⁍]Drum mag AK-75 viên", "[⌯⁍]Drum mag AK-75 viên", "[⌯⁍]Drum mag AK-75 viên",
+
+        // **BOM/LƯU/FLASH** (nhân bản x10 lần)
+        "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67", "[🧨💥]Lựu đạn M67",
+        "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18", "[🧨💨]Bom khói M18",
+        "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84", "[🧨😵‍💫]    Flashbang M84",
+
+        // **MEDKIT/HEAL** (nhân bản x10 lần)
+        "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)",
+        "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)", "[🧰]Băng cứu thương (Medkit)",
+        "[💊]Thuốc giảm đau (Painkillers)", "[💊]Thuốc giảm đau (Painkillers)", "[💊]Thuốc giảm đau (Painkillers)", "[💊]Thuốc giảm đau (Painkillers)", "[💊]Thuốc giảm đau (Painkillers)",
+
+        // **GIÁP/PHỤ KIỆN** (ít nhân bản hơn, vẫn logic)
+        "[⛑]Mũ cối Level 3", "[🎽]Giáp chống đạn Level 4", "[⛑]Mũ ACH Level 3A", "[🎽]Plate Carrier với tấm ceramic",
+        "[🎽]Áo Giáp Kevlar", "[⛑]Mũ OPS-Core FAST", "[🎽]Áo giáp mềm NIJ Level II", "Kính bảo hộ balistic",
+        "Balo chiến thuật", "[🔭]Ống nhòm tầm xa", "Dao găm quân dụng", "Mặt nạ phòng độc",
+        "Đèn pin chiến thuật", "Lương khô", "Bình nước", "Kính nhìn đêm NVG",
+        "Radio liên lạc", "Dây thừng leo trèo", "Bộ dụng cụ sửa chữa", "Áo ngụy trang",
+        "Giày boots quân sự", "Dao đa năng Leatherman", "Pin dự phòng", "Túi ngủ sinh tồn", "La bàn định vị"
     ];
 
     for (let i = 1; i <= totalItems; i++) {
