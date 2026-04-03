@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Bước 1: Khởi tạo vật phẩm";
+}
+
+<link rel="stylesheet" href="~/css/knapsack.css" />
+
+<div class="knapsack-container">
+    <h2 style="text-align:center; color: #FFD700; text-transform: uppercase; letter-spacing: 2px;">QUAY SỐ VẬT PHẨM</h2>
+    <p style="text-align:center; color: #b0c4de; margin-bottom: 30px;">Nhấn nút xoay để làm mới thuộc tính ngẫu nhiên của 10 vật phẩm</p>
+
+    <div class="controls">
+        <button class="btn" id="btn-generate" onclick="generateRandomItems()">Xoay ngẫu nhiên lại</button>
+        <button class="btn btn-success" id="btn-submit" onclick="submitItems()">Chốt danh sách & Chơi</button>
+    </div>
+
+    <div class="item-grid" id="item-container" style="min-height: 400px;">
+    </div>
+</div>
+
+<script src="~/js/knapsack-setup.js"></script>

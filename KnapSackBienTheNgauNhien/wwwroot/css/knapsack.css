@@ -1,0 +1,284 @@
+﻿/* Import Font Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Nền gradient sang trọng Đen -> Xanh Navy */
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #e0e0e0;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.knapsack-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+/* Nút bấm vàng ánh kim & xanh ngọc */
+.btn {
+    padding: 12px 24px;
+    margin: 0 10px;
+    background: linear-gradient(to right, #17a2b8, #138496);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.4);
+}
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(23, 162, 184, 0.6);
+    }
+
+.btn-success {
+    background: linear-gradient(to right, #FFD700, #F39C12);
+    color: #111;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+    .btn-success:hover {
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+    }
+
+/* Header Khu vực */
+.zone-header {
+    background: linear-gradient(to right, rgba(23, 162, 184, 0.8), transparent);
+    padding: 10px 20px;
+    border-left: 5px solid #FFD700;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Khu vực lưới vật phẩm */
+.item-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    min-height: 160px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    /* 2 DÒNG NÀY ĐỂ SỬA LỖI STRETCH */
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+/* Thẻ vật phẩm - Hiệu ứng Hover mượt mà */
+.item-card {
+    background: #1e2a35;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    width: 150px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: grab;
+    transition: all 0.3s ease;
+    user-select: none;
+    color: #fff;
+    position: relative;
+    /* Animation cho AI xếp đồ */
+    animation: fadeIn 0.5s ease;
+}
+
+    .item-card:hover {
+        transform: scale(1.05) translateY(-5px);
+        border-color: #17a2b8;
+        box-shadow: 0 8px 20px rgba(23, 162, 184, 0.4);
+    }
+
+    .item-card h4 {
+        margin: 0 0 10px 0;
+        color: #FFD700;
+    }
+
+    .item-card p {
+        margin: 5px 0;
+        font-size: 13px;
+        color: #b0c4de;
+    }
+
+    /* Animation khi kéo thả */
+    .item-card.dragging {
+        opacity: 0.4;
+        transform: scale(0.95);
+    }
+
+/* Khu vực Balo - Hiệu ứng Glow */
+.backpack-zone {
+    border: 2px dashed #17a2b8;
+    transition: all 0.3s ease;
+}
+
+    .backpack-zone.drag-over {
+        background-color: rgba(23, 162, 184, 0.2);
+        border-color: #FFD700;
+        box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+
+/* Status Bar & Progress Bar */
+.status-dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.status-info {
+    flex-grow: 1;
+    margin-right: 30px;
+}
+
+.progress {
+    height: 20px;
+    background-color: #2c3e50;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #17a2b8, #28a745);
+    width: 0%;
+    transition: width 0.4s ease, background 0.4s ease;
+}
+
+    .progress-bar.overloaded {
+        background: linear-gradient(to right, #e74c3c, #c0392b);
+    }
+
+/* Donut Chart hiển thị tỷ lệ */
+.donut-chart-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.donut-chart {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(#FFD700 0%, #FFD700 var(--percent, 0%), #2c3e50 var(--percent, 0%), #2c3e50 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.4s ease;
+}
+
+.donut-inner {
+    width: 60px;
+    height: 60px;
+    background: #1a252f;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Cảnh báo quá tải */
+.backpack-zone.zone-overweight {
+    background-color: rgba(231, 76, 60, 0.2) !important;
+    border-color: #e74c3c !important;
+}
+
+.item-card.item-overweight {
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.controls {
+    text-align: center;
+    margin-bottom: 40px; /* Tăng từ 20px lên 40px để đẩy lùi phần vật phẩm xuống */
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Tạo khoảng cách 15px giữa các nút bấm với nhau */
+}
+
+/* THÊM CLASS MỚI CHO NÚT QUAY LẠI */
+.btn-secondary {
+    background: linear-gradient(to right, #6c757d, #495057);
+    color: white;
+    text-decoration: none; /* Xóa gạch chân vì chúng ta sẽ dùng thẻ <a> */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+}
+
+    .btn-secondary:hover {
+        color: white;
+        box-shadow: 0 6px 20px rgba(108, 117, 125, 0.6);
+    }
+/* Hiệu ứng bật nảy như xổ số tại trang khởi đầu Index*/
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(50px) rotate(-10deg);
+    }
+
+    70% {
+        transform: scale(1.1) translateY(-10px) rotate(5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0) rotate(0);
+    }
+}
