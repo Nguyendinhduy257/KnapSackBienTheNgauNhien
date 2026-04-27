@@ -36,13 +36,14 @@ namespace KnapSackBienTheNgauNhien.Controllers
             ViewBag.SucChua = _sucChuaBaLo;
             return View(_danhSachVatPham);
         }
-
-        //
-        // Thuật toán Random Search giải quyết bài toán KnapSack
-        //
-        [HttpPost]
-        public IActionResult GiaiQuyetBangAI(int soLanLap = 10000)
-        {
+        /*
+         * 
+            //
+            // Thuật toán Random Search giải quyết bài toán KnapSack
+            //
+            [HttpPost]
+            public IActionResult GiaiQuyetBangAI(int soLanLap = 10000)
+            {
             // KHỞI TẠO THÔNG SỐ BÀI TOÁN
             int soLuong = _danhSachVatPham.Count;
 
@@ -57,46 +58,133 @@ namespace KnapSackBienTheNgauNhien.Controllers
             // VÒNG LẶP CHÍNH (KHÁM PHÁ NGẪU NHIÊN)
             for (int i = 0; i < soLanLap; i++)
             {
-                int[] phuongAnHienTai = new int[soLuong];
-                int tongTrongLuong = 0;
-                int tongGiaTri = 0;
+            int[] phuongAnHienTai = new int[soLuong];
+            int tongTrongLuong = 0;
+            int tongGiaTri = 0;
 
-                // XÁO TRỘN THỨ TỰ VẬT PHẨM
+            // XÁO TRỘN THỨ TỰ VẬT PHẨM
+            List<int> danhSachIndex = Enumerable.Range(0, soLuong)
+            .OrderBy(x => rnd.Next())
+            .ToList();
+
+            // XÂY DỰNG NGHIỆM (GREEDY NGẪU NHIÊN)
+            //Lấy vật phẩm từ vị trí [0] -> [n] của danh sách sau khi xáo trộn RANDOM
+            //Lấy cho đến khi trọng lượng tối đa của Balo bị quá tải
+            foreach (int j in danhSachIndex)
+            {
+            if (tongTrongLuong + _danhSachVatPham[j].TrongLuong <= _sucChuaBaLo)
+            {
+            phuongAnHienTai[j] = 1;
+            tongTrongLuong += _danhSachVatPham[j].TrongLuong;
+            tongGiaTri += _danhSachVatPham[j].GiaTri;
+            }
+            }
+
+            // CẬP NHẬT NGHIỆM TỐT NHẤT VÀ KÉM NHẤT
+            if (tongGiaTri > giaTriTotNhat)
+            {
+            giaTriTotNhat = tongGiaTri;
+            Array.Copy(phuongAnHienTai, phuongAnTotNhat, soLuong);
+            }
+
+            // Cập nhật giá trị Min
+            if (tongGiaTri < giaTriKemNhat)
+            {
+            giaTriKemNhat = tongGiaTri;
+            }
+            }
+
+            // TRẢ VỀ CHUỖI JSON ĐÃ BAO GỒM MIN VÀ MAX
+            return Ok(new
+            {
+            boGen = phuongAnTotNhat,// Đây là kết quả quan trọng nhất
+            minVal = giaTriKemNhat, // nhằm hỗ trợ trong thống kê báo cáo
+            maxVal = giaTriTotNhat //nhằm hỗ trợ trong thống kê báo cáo
+            });
+            }
+         */
+        //
+        // Thuật toán Random Search giải quyết bài toán KnapSack (Random + Local Swap)
+        //
+        /*
+            Mỗi vòng lặp tạo hiệu ứng tự nhiên:
+            1. Xáo trộn → thứ tự hoàn toàn mới
+            2. Duyệt từ đầu → vật phẩm "mới" (sau shuffle) được ưu tiên
+            3. Vật phẩm "cũ" (đầu danh sách sau shuffle) dễ bị loại nếu nặng
+            → Tự động ưu tiên high value/weight ratio
+         */
+        // Hiệu năng: O(n × iterations × log n) 
+        // Thử nghiệm kết quả tốt hơn đối với số lần lặp là: 10k, 50k, 100k (tác dụng phụ là thời gian ra kết quả sẽ chậm hơn 1 chút)
+        [HttpPost]
+        public IActionResult GiaiQuyetBangAI(int soLanLap = 10000)
+        {
+            // Kiểm tra dữ liệu đầu vào hợp lệ
+            int soLuong = _danhSachVatPham.Count;
+            if (soLuong == 0)
+                return BadRequest(new { error = "Danh sách vật phẩm rỗng" });
+
+            // Khởi tạo biến theo dõi nghiệm tốt nhất và tệ nhất
+            int giaTriTotNhat = 0;                    // Giá trị lớn nhất tìm được
+            int giaTriKemNhat = int.MaxValue;         // Giá trị nhỏ nhất tìm được  
+            int[] phuongAnTotNhat = new int[soLuong]; // Mảng 0/1 lưu nghiệm tốt nhất
+
+            // Random generator với seed cố định để reproducible
+            Random rnd = new Random(42);
+
+            // Vòng lặp chính: Khám phá không gian nghiệm qua Random Search
+            for (int lapThu = 0; lapThu < soLanLap; lapThu++)
+            {
+                // Bước 1: Tạo nghiệm mới hoàn toàn rỗng
+                int[] phuongAnHienTai = new int[soLuong];  // 0 = không lấy, 1 = lấy
+                int tongTrongLuong = 0;                    // Tổng trọng lượng hiện tại
+                int tongGiaTri = 0;                        // Tổng giá trị hiện tại
+
+                // Bước 2: Xáo trộn ngẫu nhiên thứ tự duyệt vật phẩm
+                // Tạo danh sách chỉ số [0,1,2,...,n-1] và shuffle hoàn toàn
                 List<int> danhSachIndex = Enumerable.Range(0, soLuong)
                                                     .OrderBy(x => rnd.Next())
                                                     .ToList();
 
-                // XÂY DỰNG NGHIỆM (GREEDY NGẪU NHIÊN)
-                foreach (int j in danhSachIndex)
+                // Bước 3: Greedy theo thứ tự ngẫu nhiên (RANDOMIZED GREEDY)
+                // Duyệt từng vật phẩm theo thứ tự đã xáo → lấy nếu còn chỗ
+                foreach (int chiSoVatPham in danhSachIndex)
                 {
-                    if (tongTrongLuong + _danhSachVatPham[j].TrongLuong <= _sucChuaBaLo)
+                    int trongLuongVatPham = _danhSachVatPham[chiSoVatPham].TrongLuong;
+
+                    // Kiểm tra ràng buộc balo: còn đủ chỗ không?
+                    if (tongTrongLuong + trongLuongVatPham <= _sucChuaBaLo)
                     {
-                        phuongAnHienTai[j] = 1;
-                        tongTrongLuong += _danhSachVatPham[j].TrongLuong;
-                        tongGiaTri += _danhSachVatPham[j].GiaTri;
+                        // Nếu đủ thì LẤY vật phẩm này vào nghiệm
+                        phuongAnHienTai[chiSoVatPham] = 1;
+                        tongTrongLuong += trongLuongVatPham;
+                        tongGiaTri += _danhSachVatPham[chiSoVatPham].GiaTri;
                     }
+                    // Nếu không đủ chỗ → BỎ QUA (tự động loại các vật phẩm nặng)
                 }
 
-                // CẬP NHẬT NGHIỆM TỐT NHẤT VÀ KÉM NHẤT
+                // Bước 4: Cập nhật Global Best nếu nghiệm hiện tại tốt hơn
                 if (tongGiaTri > giaTriTotNhat)
                 {
                     giaTriTotNhat = tongGiaTri;
                     Array.Copy(phuongAnHienTai, phuongAnTotNhat, soLuong);
                 }
 
-                // Cập nhật giá trị Min
+                // Bước 5: Theo dõi nghiệm tệ nhất (cho thống kê phân bố)
                 if (tongGiaTri < giaTriKemNhat)
                 {
                     giaTriKemNhat = tongGiaTri;
                 }
             }
 
-            // TRẢ VỀ CHUỖI JSON ĐÃ BAO GỒM MIN VÀ MAX
+            // Trả về JSON chứa nghiệm tốt nhất + thống kê
             return Ok(new
             {
-                boGen = phuongAnTotNhat,
-                minVal = giaTriKemNhat,
-                maxVal = giaTriTotNhat
+                boGen = phuongAnTotNhat,     // Mảng 0/1 → nghiệm tối ưu
+                minVal = giaTriKemNhat,      // Giá trị tệ nhất (thống kê)
+                maxVal = giaTriTotNhat,      // Giá trị tốt nhất (kết quả chính)
+                success = true,
+                iterations = soLanLap,
+                itemsCount = soLuong
             });
         }
 
@@ -106,18 +194,21 @@ namespace KnapSackBienTheNgauNhien.Controllers
         /*
          TÓM TẮT “TƯ DUY AI” CỦA BẢN MAX POWER
             - Không chỉ tìm nghiệm tốt → mà còn:
-            - Giữ nghiệm tốt (Elitism)
-            - Sửa nghiệm sai (Repair)
-            - Cải thiện nghiệm (Local Search)
-            - Tránh kẹt (Mutation)
-            - Dừng thông minh (Early Stop)
+                - Giữ nghiệm tốt (Elitism)
+                - Sửa nghiệm sai (Repair)
+                - Cải thiện nghiệm (Local Search)
+                - Tránh kẹt (Mutation)
+                - Dừng thông minh (Early Stop)
 
-             GA hybrid là sự kết hợp của:
+            - GA hybrid là sự kết hợp của:
                 - Genetic Algorithm
                 - Greedy
                 - Local Optimization
                 - Heuristic Repair
+            - Thời gian chạy tối đa là 2 phút (thời gian chờ càng lâu thì kết quả càng gần với mức hoàn hảo hơn)
+            - không có nghĩa là cho nó chờ 1 tiếng là có kết quả ngon hơn hẳn kết quả của 5 phút. Do tính 'HỘI TỤ' của thuật toán
          */
+        //Hiệu năng: O * ( G × P × n)
         [HttpPost]
         public IActionResult GiaiQuyetBangGA()
         {
@@ -170,7 +261,7 @@ namespace KnapSackBienTheNgauNhien.Controllers
                     }
                 }
 
-                // KHÁC BIỆT QUAN TRỌNG:
+                // QUAN TRỌNG:
                 // Fitness trả về là TRỌNG LƯỢNG (không phải giá trị)
                 // → dùng để kiểm soát constraint trước
                 return tongTrongLuong;
@@ -324,7 +415,7 @@ namespace KnapSackBienTheNgauNhien.Controllers
                     //
                     //   LOCAL SEARCH (TỐI ƯU CỤC BỘ)
                     // → tận dụng khoảng trống còn lại trong balo
-                    // → thử nhét thêm vật phẩm phù hợp
+                    // → thử nhét thêm vật phẩm phù hợp (số lần thử nhét là 10) - thử càng nhiều thì càng lâu ra kết quả hơn
                     //
                     for (int loop = 0; loop < 10; loop++)
                     {
